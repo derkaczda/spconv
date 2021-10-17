@@ -38,7 +38,7 @@ class SparseConvFunction(Function):
     @staticmethod
     def backward(ctx, grad_output):
         indice_pairs, indice_pair_num, features, filters = ctx.saved_tensors
-        input_bp, filters_bp = ops.indice_conv_backward(features, filters, grad_output, indice_pairs, indice_pair_num, False)
+        input_bp, filters_bp = ops.indice_conv_backward(features, filters, grad_output.contiguous(), indice_pairs, indice_pair_num, False)
         
         return input_bp, filters_bp, None, None, None
 
@@ -61,7 +61,7 @@ class SparseInverseConvFunction(Function):
     @staticmethod
     def backward(ctx, grad_output):
         indice_pairs, indice_pair_num, features, filters = ctx.saved_tensors
-        input_bp, filters_bp = ops.indice_conv_backward(features, filters, grad_output, indice_pairs, indice_pair_num, True, False)
+        input_bp, filters_bp = ops.indice_conv_backward(features, filters, grad_output.contiguous(), indice_pairs, indice_pair_num, True, False)
         
         return input_bp, filters_bp, None, None, None
 
@@ -85,7 +85,7 @@ class SubMConvFunction(Function):
     @staticmethod
     def backward(ctx, grad_output):
         indice_pairs, indice_pair_num, features, filters = ctx.saved_tensors
-        input_bp, filters_bp = ops.indice_conv_backward(features, filters, grad_output, indice_pairs, indice_pair_num, False, True)
+        input_bp, filters_bp = ops.indice_conv_backward(features, filters, grad_output.contiguous(), indice_pairs, indice_pair_num, False, True)
         
         return input_bp, filters_bp, None, None, None
 
@@ -108,7 +108,7 @@ class SparseMaxPoolFunction(Function):
     @staticmethod
     def backward(ctx, grad_output):
         indice_pairs, indice_pair_num, features, out = ctx.saved_tensors
-        input_bp = ops.indice_maxpool_backward(features, out, grad_output, indice_pairs, indice_pair_num)
+        input_bp = ops.indice_maxpool_backward(features, out, grad_output.contiguous(), indice_pairs, indice_pair_num)
         return input_bp, None, None, None
 
 
